@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>Identifier</key>
+		<string>com.whocares.jamf.Firefox-auto</string>
+		
+		<key>Input</key>
+		<dict>
+			<key>CATEGORY</key>
+			<string>Software</string>
+			<key>GROUP_NAME</key>
+			<string>Firefox-update-smart</string>
+			<key>GROUP_TEMPLATE</key>
+			<string>JamfSmartGroupTemplate.xml</string>
+			<key>NAME</key>
+			<string>Firefox</string>
+			<key>PATCH_TEMPLATE</key>
+			<string>JamfPatchTemplate.xml</string>			
+			<key>TESTING_GROUP_NAME</key>
+			<string>Testing</string>
+			<key>UPDATE_PREDICATE</key>
+			<string>pkg_uploaded == False</string>
+			<key>PATCH_SOFTWARE_TITLE</key>
+			<string>Mozilla Firefox</string>
+			<key>PATCH_NAME</key>
+			<string>%NAME%</string>
+			<key>PATCH_ENABLED</key>
+			<string>True</string>
+			
+			
+		</dict>
+		
+		<key>MinimumVersion</key>
+		<string>2.3</string>
+		
+		<key>ParentRecipe</key>
+		<string>com.github.rtrouton.pkg.Firefox</string>
+
+		<key>Process</key>
+	<array>
+		<dict>
+			<key>Arguments</key>
+				<dict>
+					<key>pkg_category</key>
+					<string>%CATEGORY%</string>
+					<key>predicate</key>
+					<string>%UPDATE_PREDICATE%</string>
+					<key>replace_pkg</key>
+					<string>False</string>
+					<key>pkg_name</key>
+					<string>Firefox-%version%.pkg</string>
+				</dict>			
+			<key>Processor</key>			<string>com.github.grahampugh.jamf-upload.processors/JamfPackageUploader</string>
+		</dict>				
+			
+			
+		<dict>
+			<key>Arguments</key>
+			<dict>
+				<key>computergroup_name</key>
+				<string>%GROUP_NAME%</string>
+				<key>computergroup_template</key>
+				<string>%GROUP_TEMPLATE%</string>
+				<key>replace_group</key>
+				<string>True</string>
+			</dict>			
+			<key>Processor</key>				<string>com.github.grahampugh.jamf-upload.processors/JamfComputerGroupUploader</string>
+		</dict>
+			
+		<dict>
+			<key>Arguments</key>	
+			<dict>
+				<key>patch_softwaretitle</key>
+				<string>%PATCH_SOFTWARE_TITLE%</string>
+				<key>patch_template</key>
+				<string>%PATCH_TEMPLATE%</string>
+				<key>PATCH_ENABLED</key>
+				<string>%PATCH_ENABLED%</string>
+				<key>replace_patch</key>
+				<string>False</string>
+			</dict>									
+			<key>Processor</key>			<string>com.github.grahampugh.jamf-upload.processors/JamfPatchUploader</string>	
+		</dict>
+		
+		
+		<dict>		
+			<key>Processor</key>
+			<string>StopProcessingIf</string>	
+		</dict>
+	</array>
+	</dict>
+</plist>
